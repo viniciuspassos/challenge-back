@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      PGPORT: "${DB_PORT}"
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    networks:
+      - db_network
+
+  dbup:
+    build: .
+    environment:
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT}"
+      DB_DATABASE: "${DB_DATABASE}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    networks:
+      - db_network
+    restart: on-failure:3 
+
+networks:
+  db_network:
