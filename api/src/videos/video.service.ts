@@ -1,10 +1,27 @@
 import { Injectable } from "@nestjs/common";
 import { CreateVideoDto } from "./dto/create-video-dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Videos } from "./models/video";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class VideoService {
-  async getAll() {
-    return { id: 1, url: "google.com" };
+  constructor(
+    @InjectRepository(Videos)
+    private videosRepository: Repository<Videos>
+  ) {}
+  async getAll(): Promise<Videos[]> {
+    const videos = await this.videosRepository.find();
+    console.log(
+      await this.videosRepository
+        .createQueryBuilder()
+        .select()
+        .printSql()
+        .getMany()
+    );
+
+    console.log(videos);
+    return videos;
   }
 
   getOne(id: number) {}

@@ -3,7 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { VideosModule } from "./videos/videos.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { Video } from "./videos/models/video";
+import { Videos } from "./videos/models/video";
 
 @Module({
   imports: [
@@ -15,7 +15,8 @@ import { Video } from "./videos/models/video";
       username: process.env["DB_USERNAME"],
       password: process.env["DB_PASSWORD"],
       database: process.env["DB_DATABASE"],
-      entities: [Video],
+      entities: [Videos],
+      logging: true,
       synchronize: false,
     }),
   ],
