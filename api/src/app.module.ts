@@ -16,7 +16,7 @@ import { Videos } from "./videos/models/video";
       password: process.env["DB_PASSWORD"],
       database: process.env["DB_DATABASE"],
       entities: [Videos],
-      logging: true,
+      logging: false,
       synchronize: false,
     }),
   ],

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, Injectable, HttpStatus } from "@nestjs/common";
 import { CreateVideoDto } from "./dto/create-video-dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Videos } from "./models/video";
@@ -11,20 +11,16 @@ export class VideoService {
     private videosRepository: Repository<Videos>
   ) {}
   async getAll(): Promise<Videos[]> {
-    const videos = await this.videosRepository.find();
-    console.log(
-      await this.videosRepository
-        .createQueryBuilder()
-        .select()
-        .printSql()
-        .getMany()
-    );
-
-    console.log(videos);
-    return videos;
+    return await this.videosRepository.find();
   }
 
-  getOne(id: number) {}
+  async getOne(id: number): Promise<Videos> {
+    try {
+      return await this.videosRepository.findOneOrFail(id);
+    } catch (error) {
+      throw new HttpException("Não encontrado", HttpStatus.NOT_FOUND);
+    }
+  }
 
   create(newVideo: CreateVideoDto) {}
 
