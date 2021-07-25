@@ -3,6 +3,7 @@ import { CreateVideoDto } from "./dto/create-video-dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Videos } from "./models/video";
 import { Repository } from "typeorm";
+import { UpdateVideoDto } from "./dto/update-video-dto";
 
 @Injectable()
 export class VideoService {
@@ -26,5 +27,20 @@ export class VideoService {
     return await this.videosRepository.save(newVideo);
   }
 
-  async delete(id: number) {}
+  async update(id: number, updatedVideo: UpdateVideoDto): Promise<Videos> {
+    const actualVideo: CreateVideoDto =
+      await this.videosRepository.findOneOrFail(id);
+    const videoResult: UpdateVideoDto = { ...actualVideo, ...updatedVideo };
+
+    return await this.videosRepository.save(videoResult);
+  }
+
+  async delete(id: number) {
+    try {
+      await this.videosRepository.delete(id);
+      return { message: "Deleted", success: true };
+    } catch (error) {
+      throw new HttpException("Erro ao deletar", HttpStatus.NOT_FOUND);
+    }
+  }
 }
