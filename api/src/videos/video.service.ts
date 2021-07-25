@@ -22,7 +22,9 @@ export class VideoService {
     }
   }
 
-  create(newVideo: CreateVideoDto) {}
+  async create(newVideo: CreateVideoDto): Promise<Videos> {
+    return await this.videosRepository.save(newVideo);
+  }
 
-  delete(id: number) {}
+  async delete(id: number) {}
 }

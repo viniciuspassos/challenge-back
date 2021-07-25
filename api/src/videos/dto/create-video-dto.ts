@@ -1,5 +1,8 @@
+import { IsNotEmpty } from "class-validator";
+
 export class CreateVideoDto {
-    title: string;
-    description: string;
-    url: string;    
+  @IsNotEmpty()
+  title: string;
+  description: string;
+  url: string;
 }
